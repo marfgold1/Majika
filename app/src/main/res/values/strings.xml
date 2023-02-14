@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">Majika</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="menu_twibbon">Twibbon</string>
+    <string name="menu_menu">Menu</string>
+    <string name="menu_branch">Branch</string>
+    <string name="menu_cart">Cart</string>
+
+    <!--    Menu Dummy -->
+    <string name="menu_item_name">Menu Item Name</string>
+    <string name="menu_item_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tellus felis, maximus at iaculis in, imperdiet commodo lorem. Nam eget purus urna. In nunc velit, rutrum non risus vitae, pretium lacinia ex. Fusce malesuada sapien enim, vitae tincidunt ante tincidunt at. Etiam non felis scelerisque, porttitor enim non, vestibulum lacus. Morbi nec maximus enim. Fusce lacus nibh, semper quis nisl nec, viverra suscipit leo. Donec porttitor vitae leo quis faucibus. Curabitur nisi urna, varius nec molestie a, molestie et libero. In vel odio maximus, auctor est a, ultrices enim. Quisque porta purus non lectus varius, nec maximus ex volutpat. Duis at augue non dui interdum convallis sit amet id magna. Sed nec sapien vel nunc facilisis faucibus vel vitae nibh. Vestibulum tempor, risus vel elementum pellentesque, libero arcu scelerisque risus, id consequat augue odio eu nisl. Suspendisse potenti. Vestibulum eget ultrices purus.</string>
+    <string name="menu_item_price">100.000</string>
+    <string name="menu_item_sold">Sold: 100</string>
+    <string name="menu_item_currency">IDR</string>
+
+    <!--    Menu Types -->
+    <string-array name="menu_types">
+        <item>Food</item>
+        <item>Drink</item>
+    </string-array>
 </resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_menu"
+        android:icon="@drawable/ic_menu_black_24dp"
+        android:title="@string/menu_menu" />
+
+    <item
+        android:id="@+id/navigation_branch"
+        android:icon="@drawable/ic_branch_black_24dp"
+android:title="@string/menu_branch" />
+
+        <item
+            android:id="@+id/navigation_cart"
+            android:icon="@drawable/ic_cart_black_24dp"
+            android:title="@string/menu_cart" />
+
+        <item
+            android:id="@+id/navigation_twibbon"
+            android:icon="@drawable/ic_twibbon_black_24dp"
+            android:title="@string/menu_twibbon" />
+
+
+</menu>

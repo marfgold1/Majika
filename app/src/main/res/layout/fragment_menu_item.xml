@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="96dp"
+    android:background="@drawable/secondary_bg_gradient"
+    android:paddingHorizontal="3dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    tools:context=".pages.menu.MenuItem">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/menu_item_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/menu_item_name"
+            android:textColor="@color/design_default_color_on_secondary" />
+
+        <TextView
+            android:id="@+id/menu_item_sold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/menu_item_sold"
+            android:textColor="@android:color/holo_red_dark"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/menu_item_description"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="sans-serif-medium"
+            android:justificationMode="inter_word"
+            android:text="@string/menu_item_description"
+            android:textColor="@color/design_default_color_on_secondary" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingHorizontal="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="4dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/design_default_color_secondary_variant"
+            app:icon="@drawable/ic_cart_black_24dp"
+            app:iconGravity="textEnd"
+            app:iconTint="@color/white" />
+
+        <TextView
+            android:id="@+id/menu_item_currency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/menu_item_currency"
+            android:textColor="@color/design_default_color_on_secondary" />
+
+        <TextView
+            android:id="@+id/menu_item_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/menu_item_price"
+            android:textColor="@color/design_default_color_on_secondary" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

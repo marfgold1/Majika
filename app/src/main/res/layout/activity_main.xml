@@ -18,14 +18,17 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/pageFragmentContainer"
-        android:name="com.pap.majika.pages.menu.MenuPage"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavFragmentContainer"
         app:layout_constraintEnd_toEndOf="@id/headerFragmentContainer"
         app:layout_constraintStart_toStartOf="@id/headerFragmentContainer"
         app:layout_constraintTop_toBottomOf="@id/headerFragmentContainer"
-        tools:layout="@layout/fragment_menu_page" />
+
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/main_nav"
+         />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/bottomNavFragmentContainer"

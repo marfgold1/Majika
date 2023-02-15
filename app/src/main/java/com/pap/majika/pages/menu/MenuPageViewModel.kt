@@ -27,7 +27,9 @@ class MenuPageViewModel : ViewModel() {
 //                if menu is empty, it will try again in 2 seconds
                 Log.e("MenuPageViewModel", "refreshMenuList: ${e.message}")
                 Thread.sleep(2000)
-                refreshMenuList()
+                viewModelScope.launch {
+                    refreshMenuList()
+                }
             }
         }
     }

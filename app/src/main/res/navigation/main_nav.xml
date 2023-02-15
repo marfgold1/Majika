@@ -9,4 +9,39 @@
         android:name="com.pap.majika.pages.menu.MenuPage"
         android:label="fragment_menu_page"
         tools:layout="@layout/fragment_menu_page" />
+    <fragment
+        android:id="@+id/branchPage"
+        android:name="com.pap.majika.pages.branch.BranchPage"
+        android:label="fragment_branch_page"
+        tools:layout="@layout/fragment_branch_page" />
+    <fragment
+        android:id="@+id/cartPage"
+        android:name="com.pap.majika.pages.cart.CartPage"
+        android:label="fragment_cart_page"
+        tools:layout="@layout/fragment_cart_page" />
+    <fragment
+        android:id="@+id/twibbonPage"
+        android:name="com.pap.majika.pages.twibbon.TwibbonPage"
+        android:label="fragment_twibbon_page"
+        tools:layout="@layout/fragment_twibbon_page" />
+    <action
+        android:id="@+id/action_global_menuPage"
+        app:destination="@id/menuPage"
+        app:enterAnim="@animator/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim" />
+    <action
+        android:id="@+id/action_global_branchPage"
+        app:destination="@id/branchPage"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim" />
+    <action
+        android:id="@+id/action_global_cartPage"
+        app:destination="@id/cartPage"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim" />
+    <action
+        android:id="@+id/action_global_twibbonPage"
+        app:destination="@id/twibbonPage"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim" />
 </navigation>

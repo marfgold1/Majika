@@ -5,7 +5,7 @@ import com.pap.majika.models.Response
 import retrofit2.Call
 import retrofit2.http.GET
 
-interface Majika {
+interface MajikaApi {
     @GET("menu")
-    fun getMenu(): Call<Response<List<Menu>>>
+    fun getMenus(): Call<Response<List<Menu>>>
 }

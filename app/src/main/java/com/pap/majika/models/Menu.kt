@@ -1,7 +1,10 @@
 package com.pap.majika.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "menu")
 class Menu (
     name: String,
     description: String,
@@ -10,6 +13,7 @@ class Menu (
     sold: Int,
     type: String,
         ) {
+    @PrimaryKey
     @SerializedName("name")
     var name: String = name
     @SerializedName("description")

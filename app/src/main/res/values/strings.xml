@@ -15,6 +15,10 @@
     <string name="menu_item_sold">Sold: 100</string>
     <string name="menu_item_currency">IDR</string>
 
+    <!--    Errors -->
+    <string name="error_no_menu_found">Menu Not Found</string>
+
+
     <!--    Menu Types -->
     <string-array name="menu_types">
         <item>Food</item>

@@ -2,11 +2,13 @@ package com.pap.majika.pages.menu
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.fragment.app.viewModels
 import com.pap.majika.R
 import com.pap.majika.viewModel.MenuViewModel
 
@@ -19,18 +21,27 @@ class MenuPage : Fragment() {
     private lateinit var searchLayout : android.widget.LinearLayout
     private lateinit var search: android.widget.EditText
     private lateinit var filter: android.widget.Spinner
+    private lateinit var errorText: android.widget.TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this)[MenuViewModel::class.java]
+        viewModel = ViewModelProvider(
+            this,
+            MenuViewModel.FACTORY
+        )[MenuViewModel::class.java]
         viewModel.menuList.observe(this, androidx.lifecycle.Observer {
-            if (it !== null && it.isNotEmpty()) {
+            if (it !== null) {
                 if (spinner.visibility == View.VISIBLE) {
                     spinner.visibility = View.GONE
                     recyclerView.visibility = View.VISIBLE
                     searchLayout.visibility = View.VISIBLE
                 }
                 recyclerView.adapter = MenuItemAdapter(it)
+                if (it.isEmpty()) {
+                    errorText.visibility = View.VISIBLE
+                } else {
+                    errorText.visibility = View.GONE
+                }
             } else {
                 recyclerView.adapter = MenuItemAdapter(listOf())
             }
@@ -47,6 +58,7 @@ class MenuPage : Fragment() {
         searchLayout = view.findViewById(R.id.menu_search_layout)
         search = view.findViewById(R.id.menu_search)
         filter = view.findViewById(R.id.menu_filter)
+        errorText = view.findViewById(R.id.menu_error_text)
 
 
         ArrayAdapter.createFromResource(
@@ -94,7 +106,6 @@ class MenuPage : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.refreshMenuList()
-
     }
 
 }

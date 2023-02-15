@@ -2,17 +2,17 @@ package com.pap.majika.pages.menu
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import com.pap.majika.R
+import com.pap.majika.viewModel.MenuViewModel
 
 class MenuPage : Fragment() {
 
-    private lateinit var viewModel: MenuPageViewModel
+    private lateinit var viewModel: MenuViewModel
     private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
     private lateinit var spinner: android.widget.ProgressBar
 
@@ -22,8 +22,8 @@ class MenuPage : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this)[MenuPageViewModel::class.java]
-        viewModel.menulist.observe(this, androidx.lifecycle.Observer {
+        viewModel = ViewModelProvider(this)[MenuViewModel::class.java]
+        viewModel.menuList.observe(this, androidx.lifecycle.Observer {
             if (it !== null && it.isNotEmpty()) {
                 if (spinner.visibility == View.VISIBLE) {
                     spinner.visibility = View.GONE

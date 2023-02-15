@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.lifecycle.ViewModelProvider
-import com.pap.majika.MainViewModel
+import com.pap.majika.viewModel.MainViewModel
 import com.pap.majika.R
 
 

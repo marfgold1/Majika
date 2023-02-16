@@ -8,13 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.pap.majika.R
 import com.pap.majika.viewModel.MenuViewModel
 
 class MenuPage : Fragment() {
 
-    private lateinit var viewModel: MenuViewModel
+    private  lateinit var viewModel: MenuViewModel
     private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
     private lateinit var spinner: android.widget.ProgressBar
 
@@ -26,7 +27,7 @@ class MenuPage : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(
-            this,
+            requireActivity(),
             MenuViewModel.FACTORY
         )[MenuViewModel::class.java]
         viewModel.menuList.observe(this, androidx.lifecycle.Observer {
@@ -36,14 +37,14 @@ class MenuPage : Fragment() {
                     recyclerView.visibility = View.VISIBLE
                     searchLayout.visibility = View.VISIBLE
                 }
-                recyclerView.adapter = MenuItemAdapter(it)
+                recyclerView.adapter = MenuItemAdapter(it, viewModel)
                 if (it.isEmpty()) {
                     errorText.visibility = View.VISIBLE
                 } else {
                     errorText.visibility = View.GONE
                 }
             } else {
-                recyclerView.adapter = MenuItemAdapter(listOf())
+                recyclerView.adapter = MenuItemAdapter(mapOf(), viewModel)
             }
         })
     }
@@ -98,7 +99,7 @@ class MenuPage : Fragment() {
 
 
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
-        val adapter = MenuItemAdapter(listOf())
+        val adapter = MenuItemAdapter(mapOf(), viewModel)
         recyclerView.adapter = adapter
         return view
     }

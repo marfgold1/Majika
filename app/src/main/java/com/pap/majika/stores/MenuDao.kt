@@ -6,8 +6,11 @@ import com.pap.majika.models.Menu
 
 @Dao
 interface MenuDao {
-    @Query("SELECT * FROM menu")
-    fun getAllMenu(): List<Menu>
+    @Query(
+        "SELECT * FROM menu " +
+                "LEFT JOIN cart_item ON cart_item.name = menu.name"
+    )
+    fun getAllMenuWithCartItem(): Map<Menu, List<CartItem>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAllMenu(menus: List<Menu>) : List<Long>
@@ -24,7 +27,8 @@ interface MenuDao {
 
     @Query(
         "SELECT * FROM cart_item " +
-        "JOIN menu ON cart_item.name = menu.name"
+        "JOIN menu ON cart_item.name = menu.name " +
+                "WHERE cart_item.quantity > 0"
     )
     fun getAllCartItem(): Map<CartItem, List<Menu>>
 
@@ -34,8 +38,8 @@ interface MenuDao {
     @Query("DELETE FROM cart_item")
     fun deleteAllCartItem(): Int
 
-    @Update
-    fun updateCartItem(cartItem: CartItem) : Int
+    @Upsert(entity = CartItem::class)
+    fun updateCartItem(cartItem: CartItem)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCartItem(cartItem: CartItem) : Long

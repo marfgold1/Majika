@@ -13,23 +13,38 @@ class AppRepository(
     private val retrofitClient: Retrofit
 ) {
 //    Menu
-    suspend fun getMenus() : List<Menu> {
-        return try {
+    suspend fun getMenusWithCartItem() : MutableMap<Menu, CartItem> {
+        val menusWithCartItem = appStore.menuDao().getAllMenuWithCartItem()
+        try {
             val response = retrofitClient.create(MajikaApi::class.java).getMenus()
             var menus = response.await().data!!
-            var oldMenus = appStore.menuDao().getAllMenu()
-            if (oldMenus != menus) {
+            var oldMenusName = menusWithCartItem.map {
+                it.key.name
+            }
+            var newMenus = menus.filter {
+                !oldMenusName.contains(it.name)
+            }
+
+            if (newMenus.isNotEmpty()) {
                 appStore.menuDao().updateAllMenu(menus)
                 appStore.menuDao().deleteAllCartItem()
+                return menus.associateWith {
+                    CartItem(it.name, 0)
+                }.toMutableMap()
             }
-            menus
-        } catch (e: Exception) {
-            appStore.menuDao().getAllMenu()
+        } catch (_: Exception) {
         }
+        return menusWithCartItem.map {
+            if (it.value.isEmpty()) {
+                it.key to CartItem(it.key.name, 0)
+            } else {
+                it.key to it.value[0]
+            }
+        }.toMap().toMutableMap()
     }
 
-    fun updateCartItem(cartItem: CartItem) : Int {
-        return if (cartItem.quantity == 0) {
+    fun updateCartItem(cartItem: CartItem) {
+        if (cartItem.quantity == 0) {
             appStore.menuDao().deleteCartItem(cartItem)
         } else {
             appStore.menuDao().updateCartItem(cartItem)
@@ -40,10 +55,10 @@ class AppRepository(
         return appStore.menuDao().deleteAllCartItem()
     }
 
-    fun getCartItems() : Map<CartItem, Menu> {
+    fun getCartItems() : MutableMap<Menu, CartItem> {
         val cartItems = appStore.menuDao().getAllCartItem()
         return cartItems.map {
-            it.key to it.value[0]
-        }.toMap()
+            it.value[0] to it.key
+        }.toMap().toMutableMap()
     }
 }

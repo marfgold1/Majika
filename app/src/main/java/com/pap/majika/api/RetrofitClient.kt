@@ -10,7 +10,6 @@ class RetrofitClient {
             .build()
 
         fun getInstance(): retrofit2.Retrofit {
-            Log.d("RetrofitClient", "getInstance: ")
             return retrofit
         }
     }

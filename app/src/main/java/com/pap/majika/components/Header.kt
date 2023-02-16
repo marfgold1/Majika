@@ -28,12 +28,13 @@ class Header : Fragment(), SensorEventListener {
     private var sensorAvailable = false
     private var temperature: Sensor? = null
     private var headerTitle: TextView? = null
+    private var temperatureText : TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
         sensorManager = requireActivity().getSystemService(SensorManager::class.java)
-        temperature = sensorManager.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY)
+        temperature = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE)
     }
 
     override fun onCreateView(
@@ -43,14 +44,16 @@ class Header : Fragment(), SensorEventListener {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_header, container, false)
         headerTitle = view.findViewById(R.id.header_title)
+        temperatureText = view.findViewById(R.id.header_temp)
         mainViewModel.currentMenu.observe(viewLifecycleOwner) {
             headerTitle?.text = it
             if (it == "menu") {
-                sensorManager.registerListener(this, temperature, SensorManager.SENSOR_DELAY_NORMAL)
-                sensorAvailable = true
+                if (temperature != null) {
+                    sensorManager.registerListener(this, temperature, SensorManager.SENSOR_DELAY_NORMAL)
+                    temperatureText?.visibility = View.VISIBLE
+                }
             } else {
                 sensorManager.unregisterListener(this)
-                sensorAvailable = false
             }
         }
 
@@ -63,7 +66,7 @@ class Header : Fragment(), SensorEventListener {
 
     override fun onSensorChanged(p0: SensorEvent?) {
         if (p0?.sensor?.type == Sensor.TYPE_AMBIENT_TEMPERATURE) {
-            Log.d("TEMPERATURE", p0.values[0].toString())
+            temperatureText?.text = p0.values[0].toString() + "°C"
         }
     }
 

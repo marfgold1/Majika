@@ -1,7 +1,5 @@
 package com.pap.majika.api
 
-import android.util.Log
-
 class RetrofitClient {
     companion object {
         private val retrofit = retrofit2.Retrofit.Builder()

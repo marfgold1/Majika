@@ -1,17 +1,20 @@
-package com.pap.majika
+package com.pap.majika.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.pap.majika.R
 import com.pap.majika.viewModel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mainViewModel: MainViewModel
+    private lateinit var navController: NavController
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
+        supportActionBar?.hide()
         super.onCreate(savedInstanceState)
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         setContentView(R.layout.activity_main)
@@ -21,18 +24,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun changePage(page: String) {
+        navController = this.findNavController(R.id.pageFragmentContainer)
         when (page) {
             "twibbon" -> {
-                this.findNavController(R.id.pageFragmentContainer).navigate(R.id.action_global_twibbonPage)
+                navController.navigate(R.id.action_global_twibbonPage)
             }
             "cart" -> {
-                this.findNavController(R.id.pageFragmentContainer).navigate(R.id.action_global_cartPage)
+                navController.navigate(R.id.action_global_cartPage)
             }
             "menu" -> {
-                this.findNavController(R.id.pageFragmentContainer).navigate(R.id.action_global_menuPage)
+                navController.navigate(R.id.action_global_menuPage)
             }
             "branch" -> {
-                this.findNavController(R.id.pageFragmentContainer).navigate(R.id.action_global_branchPage)
+                navController.navigate(R.id.action_global_branchPage)
             }
         }
     }

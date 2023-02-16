@@ -17,9 +17,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
-            android:theme="@style/Theme.Majika.Starting"
-            android:exported="true">
+            android:name=".activity.MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Majika.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -5,18 +5,16 @@ import com.pap.majika.api.MajikaApi
 import com.pap.majika.models.CartItem
 import com.pap.majika.models.Menu
 import com.pap.majika.stores.AppStore
-import retrofit2.Retrofit
 import retrofit2.await
 
 class AppRepository(
     private val appStore: AppStore,
-    private val retrofitClient: Retrofit
 ) {
 //    Menu
     suspend fun getMenusWithCartItem() : MutableMap<Menu, CartItem> {
         val menusWithCartItem = appStore.menuDao().getAllMenuWithCartItem()
         try {
-            val response = retrofitClient.create(MajikaApi::class.java).getMenus()
+            val response = MajikaApi.getInstance().getMenus()
             var menus = response.await().data!!
             var oldMenusName = menusWithCartItem.map {
                 it.key.name
@@ -32,7 +30,8 @@ class AppRepository(
                     CartItem(it.name, 0)
                 }.toMutableMap()
             }
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Log.e("MajikaApp", "AppRepository initialization failed", e)
         }
         return menusWithCartItem.map {
             if (it.value.isEmpty()) {

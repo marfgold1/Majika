@@ -15,7 +15,7 @@ import com.pap.majika.viewModel.MenuViewModel
 
 class MenuPage : Fragment() {
 
-    private  lateinit var viewModel: MenuViewModel
+    private lateinit var viewModel: MenuViewModel
     private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
     private lateinit var spinner: android.widget.ProgressBar
 

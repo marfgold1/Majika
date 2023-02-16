@@ -18,11 +18,12 @@ class MenuViewModel(
 //    Menu
     private val _menuList = MutableLiveData<Map<Menu, CartItem>>()
     val menuList = _menuList as LiveData<Map<Menu, CartItem>>
-
+    //FIXME: make this a singleton
     fun refreshMenuList() {
         viewModelScope.launch {
             _totalMenuList = appRepository.getMenusWithCartItem()
             _menuList.value = _totalMenuList ?: mapOf()
+            _cartList.value = _totalMenuList?.filter { it.value.quantity > 0 } ?: mapOf()
         }
     }
 
@@ -37,13 +38,19 @@ class MenuViewModel(
         cartItem.quantity += 1
         appRepository.updateCartItem(cartItem)
         _totalMenuList!![menu] = cartItem
+        _cartList.value = _totalMenuList?.filter { it.value.quantity > 0 } ?: mapOf()
     }
 
     fun removeFromCart(menu: Menu) {
         var cartItem = _totalMenuList!![menu]
         cartItem!!.quantity -= 1
         appRepository.updateCartItem(cartItem!!)
+        _cartList.value = _totalMenuList?.filter { it.value.quantity > 0 } ?: mapOf()
     }
+
+//    Cart
+    var _cartList = MutableLiveData<Map<Menu, CartItem>>()
+    val cartList = _cartList as LiveData<Map<Menu, CartItem>>
 
 
 //    Factory

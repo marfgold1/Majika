@@ -5,56 +5,54 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import com.pap.majika.R
+import com.pap.majika.pages.menu.MenuItemAdapter
+import com.pap.majika.viewModel.MenuViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [CartPage.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CartPage : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
+    private lateinit var viewModel: MenuViewModel
+    private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
+    private lateinit var subtotal: android.widget.TextView
+    private lateinit var payButton : android.widget.Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        viewModel = ViewModelProvider(
+            requireActivity(),
+            MenuViewModel.FACTORY
+        )[MenuViewModel::class.java]
+        viewModel.cartList.observe(this, androidx.lifecycle.Observer { tuple ->
+            if (tuple !== null) {
+                val cartItems = tuple.filter { it.value.quantity > 0 }
+                if (cartItems.isNotEmpty()) {
+                    recyclerView.adapter = MenuItemAdapter(cartItems, viewModel)
+                    val subtotalString = tuple.keys.first().currency + " " + tuple.map { it.key.price * it.value.quantity }.sum().toString()
+                    subtotal.text = subtotalString
+                } else {
+                    recyclerView.adapter = MenuItemAdapter(mapOf(), viewModel)
+                    subtotal.text = "0.00"
+                }
+            } else {
+                viewModel.refreshMenuList()
+                recyclerView.adapter = MenuItemAdapter(mapOf(), viewModel)
+                subtotal.text = "0.00"
+            }
+        })
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cart_page, container, false)
-    }
+        val view = inflater.inflate(R.layout.fragment_cart_page, container, false)
+        recyclerView = view.findViewById(R.id.cart_recycler_view)
+        subtotal = view.findViewById(R.id.cart_subtotal)
+        payButton = view.findViewById(R.id.cart_pay_button)
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CartPage.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CartPage().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
+        recyclerView.adapter = MenuItemAdapter(mapOf(), viewModel)
+
+        return view
     }
 }

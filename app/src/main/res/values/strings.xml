@@ -17,6 +17,9 @@
 
     <!--    Errors -->
     <string name="error_no_menu_found">Menu Not Found</string>
+    <string name="capture_btn_take">Capture</string>
+    <string name="twibbon_img_description">Twibbon overlay image</string>
+    <string name="capture_btn_retake">Retake</string>
 
 
     <!--    Menu Types -->

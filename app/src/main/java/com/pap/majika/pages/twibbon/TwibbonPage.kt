@@ -1,16 +1,15 @@
 package com.pap.majika.pages.twibbon
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import com.pap.majika.R
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.pap.majika.databinding.FragmentTwibbonPageBinding
+import com.pap.majika.utils.CameraSetup
+import java.util.concurrent.ExecutorService
 
 /**
  * A simple [Fragment] subclass.
@@ -18,24 +17,42 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class TwibbonPage : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding: FragmentTwibbonPageBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var cameraExecutor: ExecutorService? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        super.onCreateView(inflater, container, savedInstanceState)
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_twibbon_page, container, false)
+        _binding = FragmentTwibbonPageBinding.inflate(inflater, container, false)
+        binding.captureBtn.isVisible = false
+        CameraSetup(this, binding.cameraView) { cam ->
+            binding.captureBtn.isVisible = true
+            binding.cameraView.overlay.add(binding.twibbonView)
+            setCaptureButton(cam)
+        }
+        return binding.root
+    }
+
+    private fun setCaptureButton(cam: CameraSetup) {
+        binding.captureBtn.text = getString(R.string.capture_btn_take)
+        cam.startCamera()
+        binding.captureBtn.setOnClickListener {
+            cam.stopCamera()
+            binding.captureBtn.text = getString(R.string.capture_btn_retake)
+            binding.captureBtn.setOnClickListener {
+                setCaptureButton(cam)
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        cameraExecutor?.shutdown()
     }
 
     companion object {
@@ -43,18 +60,10 @@ class TwibbonPage : Fragment() {
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
          * @return A new instance of fragment TwibbonPage.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TwibbonPage().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        fun newInstance() =
+            TwibbonPage()
     }
 }

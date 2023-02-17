@@ -1,9 +1,8 @@
 package com.pap.majika.viewModel
 
-import android.util.Log
 import androidx.lifecycle.*
-import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.pap.majika.MajikaApp
 import com.pap.majika.models.CartItem
 import com.pap.majika.models.Menu
@@ -18,7 +17,11 @@ class MenuViewModel(
 //    Menu
     private val _menuList = MutableLiveData<Map<Menu, CartItem>>()
     val menuList = _menuList as LiveData<Map<Menu, CartItem>>
-    //FIXME: make this a singleton
+
+    init {
+        refreshMenuList()
+    }
+
     fun refreshMenuList() {
         viewModelScope.launch {
             _totalMenuList = appRepository.getMenusWithCartItem()
@@ -29,7 +32,8 @@ class MenuViewModel(
 
     fun filterMenuList(search: String, filter: String) {
         _menuList.value = _totalMenuList?.filter {
-            it.key.name.contains(search, true) && it.key.type.contains(filter, true)
+            it.key.name.contains(search, true)
+                    && it.key.type.contains(filter, true)
         }
     }
 
@@ -51,7 +55,6 @@ class MenuViewModel(
 //    Cart
     var _cartList = MutableLiveData<Map<Menu, CartItem>>()
     val cartList = _cartList as LiveData<Map<Menu, CartItem>>
-
 
 //    Factory
     companion object {

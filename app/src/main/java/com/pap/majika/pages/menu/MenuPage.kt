@@ -1,20 +1,19 @@
 package com.pap.majika.pages.menu
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.pap.majika.R
 import com.pap.majika.viewModel.MenuViewModel
 
 class MenuPage : Fragment() {
-
     private lateinit var viewModel: MenuViewModel
     private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
     private lateinit var spinner: android.widget.ProgressBar
@@ -30,7 +29,7 @@ class MenuPage : Fragment() {
             requireActivity(),
             MenuViewModel.FACTORY
         )[MenuViewModel::class.java]
-        viewModel.menuList.observe(this, androidx.lifecycle.Observer {
+        viewModel.menuList.observe(this) {
             if (it !== null) {
                 if (spinner.visibility == View.VISIBLE) {
                     spinner.visibility = View.GONE
@@ -46,7 +45,7 @@ class MenuPage : Fragment() {
             } else {
                 recyclerView.adapter = MenuItemAdapter(mapOf(), viewModel)
             }
-        })
+        }
     }
 
     override fun onCreateView(
@@ -61,7 +60,6 @@ class MenuPage : Fragment() {
         filter = view.findViewById(R.id.menu_filter)
         errorText = view.findViewById(R.id.menu_error_text)
 
-
         ArrayAdapter.createFromResource(
             requireContext(),
             R.array.menu_types,
@@ -71,42 +69,28 @@ class MenuPage : Fragment() {
             filter.adapter = adapter
         }
         filter.setSelection(0)
-        filter.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+        filter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
-                parent: android.widget.AdapterView<*>?,
+                parent: AdapterView<*>?,
                 view: View?,
                 position: Int,
                 id: Long
             ) {
                 viewModel.filterMenuList(search.text.toString(), filter.selectedItem.toString())
             }
-
-            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        search.addTextChangedListener(object : android.text.TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
+        search.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 viewModel.filterMenuList(search.text.toString(), filter.selectedItem.toString())
             }
-
-            override fun afterTextChanged(s: android.text.Editable?) {
-            }
+            override fun afterTextChanged(s: android.text.Editable?) {}
         })
 
-
-        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
-        val adapter = MenuItemAdapter(mapOf(), viewModel)
-        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = MenuItemAdapter(mapOf(), viewModel)
         return view
     }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel.refreshMenuList()
-    }
-
 }

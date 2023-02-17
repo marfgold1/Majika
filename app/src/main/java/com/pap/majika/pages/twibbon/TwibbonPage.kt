@@ -29,24 +29,28 @@ class TwibbonPage : Fragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         // Inflate the layout for this fragment
         _binding = FragmentTwibbonPageBinding.inflate(inflater, container, false)
-        binding.captureBtn.isVisible = false
-        CameraSetup(binding.cameraView).setup(this) { cam ->
-            binding.captureBtn.isVisible = true
-            binding.cameraView.overlay.add(binding.twibbonView)
-            cam.cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-            setCaptureButton(cam)
+        with (binding) {
+            captureBtn.isVisible = false
+            CameraSetup(cameraView).setup(this@TwibbonPage) { cam ->
+                captureBtn.isVisible = true
+                cameraView.overlay.add(twibbonView)
+                cam.cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+                setCaptureButton(cam)
+            }
+            return root
         }
-        return binding.root
     }
 
     private fun setCaptureButton(cam: CameraSetup) {
-        binding.captureBtn.text = getString(R.string.capture_btn_take)
-        cam.startCamera()
-        binding.captureBtn.setOnClickListener {
-            cam.stopCamera()
-            binding.captureBtn.text = getString(R.string.capture_btn_retake)
-            binding.captureBtn.setOnClickListener {
-                setCaptureButton(cam)
+        with (binding) {
+            captureBtn.text = getString(R.string.capture_btn_take)
+            cam.startCamera()
+            captureBtn.setOnClickListener {
+                cam.stopCamera()
+                captureBtn.text = getString(R.string.capture_btn_retake)
+                captureBtn.setOnClickListener {
+                    setCaptureButton(cam)
+                }
             }
         }
     }

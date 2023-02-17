@@ -7,8 +7,7 @@
     android:background="@drawable/secondary_bg_gradient"
     android:paddingHorizontal="3dp"
     android:paddingTop="4dp"
-    android:paddingBottom="4dp"
-    tools:context=".pages.menu.MenuItem">
+    android:paddingBottom="4dp">
 
     <!-- TODO: Update blank fragment layout -->
 

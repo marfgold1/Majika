@@ -5,7 +5,6 @@ import com.pap.majika.api.MajikaApi
 import com.pap.majika.models.CartItem
 import com.pap.majika.models.Menu
 import com.pap.majika.stores.AppStore
-import retrofit2.await
 
 class AppRepository(
     private val appStore: AppStore,
@@ -15,7 +14,7 @@ class AppRepository(
         val menusWithCartItem = appStore.menuDao().getAllMenuWithCartItem()
         try {
             val response = MajikaApi.getInstance().getMenus()
-            var menus = response.await().data!!
+            var menus = response.data!!
             var oldMenusName = menusWithCartItem.map {
                 it.key.name
             }

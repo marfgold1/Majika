@@ -46,15 +46,17 @@ class PaymentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPaymentBinding.inflate(layoutInflater)
-        binding.statusLayout.isVisible = false
-        setContentView(binding.root)
-        handler = Handler(Looper.getMainLooper())
-        val total = intent.extras?.getString("total_price")!!
-        binding.priceTotalText.text = getString(R.string.total_payment_text, total)
-        cameraSetup = CameraSetup(binding.previewView)
-        cameraSetup.setup(this) { cam ->
-            startAnalysis()
-            cam.startCamera(analysisUseCase)
+        with (binding) {
+            statusLayout.isVisible = false
+            setContentView(root)
+            handler = Handler(Looper.getMainLooper())
+            val total = intent.extras?.getString("total_price")!!
+            priceTotalText.text = getString(R.string.total_payment_text, total)
+            cameraSetup = CameraSetup(previewView)
+            cameraSetup.setup(this@PaymentActivity) { cam ->
+                startAnalysis()
+                cam.startCamera(analysisUseCase)
+            }
         }
     }
 
@@ -88,43 +90,45 @@ class PaymentActivity : AppCompatActivity() {
     }
 
     private fun changeStatus(status: String) {
-        when (status) {
-            "SUCCESS" -> {
-                cameraSetup.stopCamera()
-                binding.statusImg.setColorFilter(Color.argb(255, 0, 255,0))
-                binding.statusImg.setImageResource(R.drawable.ic_status_success)
-                binding.statusLayout.isVisible = true
-                binding.statusBodyText.text = getText(
-                    R.string.status_body_pay_success,
-                )
-                binding.statusDescText.text = getText(
-                    R.string.status_desc_pay_success
-                )
-                handler.postDelayed(backToMain, 5000)
-                refreshTimer(5)
-            }
-            "FAILED" -> {
-                binding.statusImg.setColorFilter(Color.argb(255, 255, 0,0))
-                binding.statusImg.setImageResource(R.drawable.ic_status_fail)
-                binding.statusLayout.isVisible = true
-                binding.tryAgainBtn.isVisible = true
-                binding.statusTitleText.text = getText(
-                    R.string.status_title_pay_scanning,
-                )
-                binding.statusBodyText.text = getText(
-                    R.string.status_body_pay_fail,
-                )
-                binding.statusDescText.text = getText(
-                    R.string.status_desc_pay_fail
-                )
-            }
-            else -> {
-                startAnalysis()
-                binding.statusTitleText.text = getText(
-                    R.string.status_title_pay_scanning,
-                )
-                binding.statusLayout.isVisible = false
-                binding.tryAgainBtn.isVisible = false
+        with (binding) {
+            when (status) {
+                "SUCCESS" -> {
+                    cameraSetup.stopCamera()
+                    statusImg.setColorFilter(Color.argb(255, 0, 255, 0))
+                    statusImg.setImageResource(R.drawable.ic_status_success)
+                    statusLayout.isVisible = true
+                    statusBodyText.text = getText(
+                        R.string.status_body_pay_success,
+                    )
+                    statusDescText.text = getText(
+                        R.string.status_desc_pay_success
+                    )
+                    handler.postDelayed(backToMain, 5000)
+                    refreshTimer(5)
+                }
+                "FAILED" -> {
+                    statusImg.setColorFilter(Color.argb(255, 255, 0, 0))
+                    statusImg.setImageResource(R.drawable.ic_status_fail)
+                    statusLayout.isVisible = true
+                    tryAgainBtn.isVisible = true
+                    statusTitleText.text = getText(
+                        R.string.status_title_pay_failed,
+                    )
+                    statusBodyText.text = getText(
+                        R.string.status_body_pay_fail,
+                    )
+                    statusDescText.text = getText(
+                        R.string.status_desc_pay_fail
+                    )
+                }
+                else -> {
+                    startAnalysis()
+                    statusTitleText.text = getText(
+                        R.string.status_title_pay_scanning,
+                    )
+                    statusLayout.isVisible = false
+                    tryAgainBtn.isVisible = false
+                }
             }
         }
     }

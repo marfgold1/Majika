@@ -30,6 +30,7 @@
     <string name="status_body_pay_fail">Fail!</string>
     <string name="status_desc_pay_fail">Payment is not done yet!</string>
     <string name="try_again_pay_btn">Try Again</string>
+    <string name="status_title_pay_failed">Payment failed!</string>
 
 
     <!--    Menu Types -->

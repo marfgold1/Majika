@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.camera.core.CameraSelector
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.pap.majika.R
 import com.pap.majika.databinding.FragmentTwibbonPageBinding
 import com.pap.majika.utils.CameraSetup
-import java.util.concurrent.ExecutorService
 
 /**
  * A simple [Fragment] subclass.
@@ -20,7 +20,7 @@ class TwibbonPage : Fragment() {
     private var _binding: FragmentTwibbonPageBinding? = null
     private val binding get() = _binding!!
 
-    private var cameraExecutor: ExecutorService? = null
+    private var camera: CameraSetup? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,9 +30,10 @@ class TwibbonPage : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentTwibbonPageBinding.inflate(inflater, container, false)
         binding.captureBtn.isVisible = false
-        CameraSetup(this, binding.cameraView) { cam ->
+        CameraSetup(binding.cameraView).setup(this) { cam ->
             binding.captureBtn.isVisible = true
             binding.cameraView.overlay.add(binding.twibbonView)
+            cam.cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
             setCaptureButton(cam)
         }
         return binding.root
@@ -52,7 +53,6 @@ class TwibbonPage : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        cameraExecutor?.shutdown()
     }
 
     companion object {

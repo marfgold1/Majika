@@ -1,12 +1,15 @@
 package com.pap.majika.utils
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
+import androidx.camera.core.UseCase
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
@@ -15,30 +18,55 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class CameraSetup(
-    private val fragment: Fragment,
     private val view: PreviewView,
-    afterSetup: ((CameraSetup)->Unit)? = null,
 ) {
-    private val context = fragment.requireContext()
+    private var activity: AppCompatActivity? = null
+    private lateinit var context: Context
     private var executor: ExecutorService? = null
+    private var fragment: Fragment? = null
     private lateinit var cameraProvider: ProcessCameraProvider
+    var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+    val preview = Preview.Builder()
+        .build()
+        .also {
+            it.setSurfaceProvider(view.surfaceProvider)
+        }
 
-    init {
+    fun setup(
+        activity: AppCompatActivity,
+        afterSetup: ((CameraSetup)->Unit)? = null,
+    ) {
+        this.activity = activity
+        this.context = activity.baseContext
+        this.setup(afterSetup)
+    }
+
+    fun setup(
+        fragment: Fragment,
+        afterSetup: ((CameraSetup) -> Unit)? = null,
+    ) {
+        this.fragment = fragment
+        this.context = fragment.requireContext()
+        this.setup(afterSetup)
+    }
+
+    private fun setup(
+        afterSetup: ((CameraSetup) -> Unit)? = null,
+    ) {
         var isGranted = true
-        if (!allPermissionsGranted(fragment)) {
-            val reqPerm = fragment.registerForActivityResult(
+        if (!allPermissionsGranted(context)) {
+            (fragment ?: activity)?.registerForActivityResult(
                 ActivityResultContracts.RequestPermission()
             ) {
-                if(!it) {
+                if (!it) {
                     isGranted = false
                     Toast.makeText(
-                        fragment.requireContext(),
-                        "Can't show twibbon because camera is not permitted",
+                        context,
+                        "Can't show camera because user denied the permission!",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-            }
-            reqPerm.launch(REQUIRED_PERMISSIONS[0])
+            }?.launch(REQUIRED_PERMISSIONS[0])
         }
         if (isGranted) {
             executor = Executors.newSingleThreadExecutor()
@@ -50,19 +78,21 @@ class CameraSetup(
         }
     }
 
-    fun startCamera() {
-        val preview = Preview.Builder()
-            .build()
-            .also {
-                it.setSurfaceProvider(view.surfaceProvider)
-            }
-        // Select back camera as a default
-        val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+    fun startCamera(
+        vararg useCases: UseCase
+    ) {
         try {
             // Unbind use cases before rebinding
             cameraProvider.unbindAll()
             // Bind use cases to camera
-            cameraProvider.bindToLifecycle(fragment, cameraSelector, preview)
+            (fragment ?: activity)?.let {
+                cameraProvider.bindToLifecycle(
+                    it,
+                    cameraSelector,
+                    preview,
+                    *useCases,
+                )
+            }
         } catch(exc: Exception) {
             Log.e(TAG, "Use case binding failed", exc)
         }
@@ -70,6 +100,7 @@ class CameraSetup(
 
     fun stopCamera() {
         cameraProvider.unbindAll()
+        executor?.shutdown()
     }
 
     companion object {
@@ -78,9 +109,9 @@ class CameraSetup(
             mutableListOf (
                 Manifest.permission.CAMERA
             ).toTypedArray()
-        private fun allPermissionsGranted(frag: Fragment) = REQUIRED_PERMISSIONS.all {
+        private fun allPermissionsGranted(context: Context) = REQUIRED_PERMISSIONS.all {
             ContextCompat.checkSelfPermission(
-                frag.requireContext(), it) == PackageManager.PERMISSION_GRANTED
+                context, it) == PackageManager.PERMISSION_GRANTED
         }
     }
 }

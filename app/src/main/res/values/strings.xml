@@ -20,6 +20,16 @@
     <string name="capture_btn_take">Capture</string>
     <string name="twibbon_img_description">Twibbon overlay image</string>
     <string name="capture_btn_retake">Retake</string>
+    <string name="status_title_pay_scanning">Scan payment…</string>
+    <string name="status_title_pay_checking">Payment detected, checking…</string>
+    <string name="status_title_pay_done">Payment success! Back to main in %d…</string>
+    <string name="total_payment_text">Total: %s</string>
+    <string name="status_img_payment_desc">Payment status icon</string>
+    <string name="status_body_pay_success">Success!</string>
+    <string name="status_desc_pay_success">Payment is done!</string>
+    <string name="status_body_pay_fail">Fail!</string>
+    <string name="status_desc_pay_fail">Payment is not done yet!</string>
+    <string name="try_again_pay_btn">Try Again</string>
 
 
     <!--    Menu Types -->

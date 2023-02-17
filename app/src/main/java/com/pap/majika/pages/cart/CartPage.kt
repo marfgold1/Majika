@@ -21,23 +21,32 @@ class CartPage : Fragment() {
             requireActivity(),
             MenuViewModel.FACTORY
         )[MenuViewModel::class.java]
-        viewModel.cartList.observe(this, androidx.lifecycle.Observer { tuple ->
+        formatPrice.currency = Currency.getInstance(
+            viewModel.cartList.value?.keys?.firstOrNull()?.currency ?: "IDR"
+        )
+        formatPrice.maximumFractionDigits = 2
+        viewModel.cartList.observe(this) { tuple ->
             if (tuple !== null) {
                 val cartItems = tuple.filter { it.value.quantity > 0 }
                 if (cartItems.isNotEmpty()) {
                     recyclerView.adapter = MenuItemAdapter(cartItems, viewModel)
-                    val subtotalString = tuple.keys.first().currency + " " + tuple.map { it.key.price * it.value.quantity }.sum().toString()
+                    val subtotalString = formatPrice.format(tuple.map {
+                        it.key.price * it.value.quantity
+                    }.sum())
                     subtotal.text = subtotalString
+                    payButton.isVisible = true
                 } else {
                     recyclerView.adapter = MenuItemAdapter(mapOf(), viewModel)
                     subtotal.text = "0.00"
+                    payButton.isVisible = false
                 }
             } else {
                 viewModel.refreshMenuList()
                 recyclerView.adapter = MenuItemAdapter(mapOf(), viewModel)
                 subtotal.text = "0.00"
+                payButton.isVisible = false
             }
-        })
+        }
 
     }
 
@@ -52,6 +61,15 @@ class CartPage : Fragment() {
 
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
         recyclerView.adapter = MenuItemAdapter(mapOf(), viewModel)
+
+        payButton.setOnClickListener {
+            startActivity(
+                Intent(
+                    this.requireContext(),
+                    PaymentActivity::class.java,
+                ).putExtra("total_price", subtotal.text)
+            )
+        }
 
         return view
     }

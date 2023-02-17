@@ -1,5 +1,6 @@
 package com.pap.majika.api
 
+import com.pap.majika.models.Branch
 import com.pap.majika.models.Menu
 import com.pap.majika.models.PaymentStatus
 import com.pap.majika.models.Response
@@ -13,6 +14,9 @@ interface MajikaApi {
 
     @POST("payment/{transaction_id}")
     suspend fun postPayment(@Path("transaction_id") transaction_id: String): PaymentStatus
+
+    @GET("branch")
+    suspend fun getBranch(): Response<List<Branch>>
 
     companion object {
         private val ins = RetrofitClient.getInstance().create(MajikaApi::class.java)

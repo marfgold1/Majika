@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 class BranchPage : Fragment() {
     private var _binding: FragmentBranchPageBinding? = null
     private val binding get() = _binding!!
-    val branchViewModel: BranchViewModel by activityViewModels()
+    private val branchViewModel: BranchViewModel by activityViewModels()
 
     fun changeStatus(items: Response<List<Branch>>?) {
         with (binding) {

@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -20,25 +20,18 @@ import kotlinx.coroutines.launch
 class BranchPage : Fragment() {
     private var _binding: FragmentBranchPageBinding? = null
     private val binding get() = _binding!!
-    val branchViewModel: BranchViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    val branchViewModel: BranchViewModel by activityViewModels()
 
     fun changeStatus(items: Response<List<Branch>>?) {
         with (binding) {
             if (items == null) {
                 branchSwipeLayout.isRefreshing = true
-                branchSwipeLayout.isVisible = false
                 branchStatusLayout.isVisible = false
             } else if (items.data == null) {
                 branchSwipeLayout.isRefreshing = false
-                branchSwipeLayout.isVisible = false
                 branchStatusLayout.isVisible = true
             } else {
                 branchSwipeLayout.isRefreshing = false
-                branchSwipeLayout.isVisible = true
                 branchStatusLayout.isVisible = false
                 branchView.adapter = BranchItemAdapter(items.data!!)
             }

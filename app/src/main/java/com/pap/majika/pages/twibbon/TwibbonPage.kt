@@ -20,8 +20,6 @@ class TwibbonPage : Fragment() {
     private var _binding: FragmentTwibbonPageBinding? = null
     private val binding get() = _binding!!
 
-    private var camera: CameraSetup? = null
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

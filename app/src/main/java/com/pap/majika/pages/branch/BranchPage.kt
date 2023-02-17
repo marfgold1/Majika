@@ -33,7 +33,9 @@ class BranchPage : Fragment() {
             } else {
                 branchSwipeLayout.isRefreshing = false
                 branchStatusLayout.isVisible = false
-                branchView.adapter = BranchItemAdapter(items.data!!)
+                branchView.adapter = BranchItemAdapter(items.data!!.sortedBy {
+                    it.branch_name
+                })
             }
         }
     }

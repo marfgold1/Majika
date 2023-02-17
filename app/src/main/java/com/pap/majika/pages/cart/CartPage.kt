@@ -1,20 +1,26 @@
 package com.pap.majika.pages.cart
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.pap.majika.R
+import com.pap.majika.activity.PaymentActivity
 import com.pap.majika.pages.menu.MenuItemAdapter
 import com.pap.majika.viewModel.MenuViewModel
+import java.text.NumberFormat
+import java.util.*
 
 class CartPage : Fragment() {
     private lateinit var viewModel: MenuViewModel
     private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
     private lateinit var subtotal: android.widget.TextView
     private lateinit var payButton : android.widget.Button
+    private val formatPrice: NumberFormat = NumberFormat.getCurrencyInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(

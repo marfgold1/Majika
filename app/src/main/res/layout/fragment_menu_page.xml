@@ -9,44 +9,37 @@
 
 
         <TextView
-            android:id="@+id/menu_error_text"
+            android:id="@+id/menuErrorText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/error_no_menu_found"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/menu_search_layout"
-            app:layout_constraintTop_toTopOf="@+id/menu_recycler_view"
+            app:layout_constraintStart_toStartOf="@id/menuSearchLayout"
+            app:layout_constraintTop_toTopOf="@+id/menuSwipeLayout"
             tools:visibility="visible" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/menu_recycler_view"
-            android:layout_width="0dp"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/menuSwipeLayout"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:scrollbars=""
-            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/menu_search_layout"
-            app:layout_constraintVertical_bias="1.0"
-            tools:visibility="visible" />
+            app:layout_constraintTop_toBottomOf="@+id/menuSearchLayout">
 
-        <ProgressBar
-            android:id="@+id/menu_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/menu_recycler_view"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="gone" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/menuRecyclerView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:scrollbars=""
+                    android:visibility="invisible"
+                    tools:visibility="visible" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <LinearLayout
-            android:id="@+id/menu_search_layout"
+            android:id="@+id/menuSearchLayout"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:orientation="horizontal"
@@ -55,20 +48,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible">
+
                 <EditText
-                    android:id="@+id/menu_search"
+                    android:id="@+id/menuSearch"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:autofillHints="menu"
                     android:drawableStart="@drawable/ic_search_black_24dp"
+                    android:drawableTint="?attr/colorOnBackground"
                     android:ems="10"
-                    android:hint="Search"
+                    android:hint="@string/search"
                     android:inputType="textNoSuggestions" />
                 <Spinner
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:id="@+id/menu_filter"
+                    android:id="@+id/menuFilter"
                     android:entries="@array/menu_types"
                     />
         </LinearLayout>

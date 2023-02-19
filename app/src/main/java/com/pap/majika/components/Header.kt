@@ -54,6 +54,7 @@ class Header : Fragment(), SensorEventListener {
                 }
             } else {
                 sensorManager.unregisterListener(this)
+                temperatureText?.visibility = View.GONE
             }
         }
 

@@ -1,6 +1,7 @@
 package com.pap.majika.activity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
@@ -21,6 +22,26 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.currentMenu.observe(this, androidx.lifecycle.Observer {
             changePage(it)
         })
+    }
+
+    override fun onBackPressed() {
+        val temp = super.onBackPressed()
+        navController = this.findNavController(R.id.pageFragmentContainer)
+        when (navController.currentDestination?.id) {
+            R.id.twibbonPage -> {
+                mainViewModel.currentMenu.value = "twibbon"
+            }
+            R.id.cartPage -> {
+                mainViewModel.currentMenu.value = "cart"
+            }
+            R.id.menuPage -> {
+                mainViewModel.currentMenu.value = "menu"
+            }
+            R.id.branchPage -> {
+                mainViewModel.currentMenu.value = "branch"
+            }
+        }
+        return temp
     }
 
     private fun changePage(page: String) {

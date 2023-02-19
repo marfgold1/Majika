@@ -32,6 +32,8 @@
     <string name="try_again_pay_btn">Try Again</string>
     <string name="status_title_pay_failed">Payment failed!</string>
     <string name="search">Search</string>
+    <string name="status_branch_na">Cannot get the data from server.</string>
+    <string name="status_branch_empty">No branch available.</string>
 
 
     <!--    Menu Types -->

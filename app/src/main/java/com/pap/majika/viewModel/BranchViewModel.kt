@@ -27,7 +27,10 @@ class BranchViewModel : ViewModel() {
             try {
                 _uiState.value = apiClient.getBranch()
             } catch (e: Exception) {
-                _uiState.value = Response() // empty response on error
+                _uiState.value = Response(
+                    message = e.message,
+                    size = -1
+                )
                 Log.e("BranchView", "Error when retrieving branch data.", e)
             }
         }

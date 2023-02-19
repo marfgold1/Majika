@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.pap.majika.R
 import com.pap.majika.databinding.FragmentBranchPageBinding
 import com.pap.majika.models.Branch
 import com.pap.majika.models.Response
@@ -22,15 +23,22 @@ class BranchPage : Fragment() {
     private val binding get() = _binding!!
     private val branchViewModel: BranchViewModel by activityViewModels()
 
-    fun changeStatus(items: Response<List<Branch>>?) {
+    private fun changeStatus(items: Response<List<Branch>>?) {
         with (binding) {
-            if (items == null) {
+            if (items == null) { // is refreshing
                 branchSwipeLayout.isRefreshing = true
                 branchStatusLayout.isVisible = false
-            } else if (items.data == null) {
+            } else if (items.size == -1) { // server can't be reached.
                 branchSwipeLayout.isRefreshing = false
                 branchStatusLayout.isVisible = true
-            } else {
+                branchStatusText.text = getString(R.string.status_branch_na)
+                branchView.adapter = BranchItemAdapter(listOf())
+            } else if (items.data == null) { // data is empty from server
+                branchSwipeLayout.isRefreshing = false
+                branchStatusLayout.isVisible = true
+                branchStatusText.text = getString(R.string.status_branch_empty)
+                branchView.adapter = BranchItemAdapter(listOf())
+            } else { // data available
                 branchSwipeLayout.isRefreshing = false
                 branchStatusLayout.isVisible = false
                 branchView.adapter = BranchItemAdapter(items.data!!.sortedBy {
@@ -47,9 +55,6 @@ class BranchPage : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentBranchPageBinding.inflate(inflater, container, false)
         binding.branchSwipeLayout.setOnRefreshListener {
-            branchViewModel.getBranches()
-        }
-        binding.branchTryAgainBtn.setOnClickListener {
             branchViewModel.getBranches()
         }
         binding.branchView.layoutManager = LinearLayoutManager(context)

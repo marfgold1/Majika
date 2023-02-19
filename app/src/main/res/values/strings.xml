@@ -34,6 +34,7 @@
     <string name="search">Search</string>
     <string name="status_branch_na">Cannot get the data from server.</string>
     <string name="status_branch_empty">No branch available.</string>
+    <string name="switch_camera_desc_btn">Switch camera</string>
 
 
     <!--    Menu Types -->

@@ -8,13 +8,13 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.view.PreviewView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.pap.majika.R
 import com.pap.majika.databinding.FragmentTwibbonPageBinding
 import com.pap.majika.utils.CameraSetup
 
+
 class TwibbonPage : Fragment() {
-    private var _binding: FragmentTwibbonPageBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentTwibbonPageBinding
+    private lateinit var cameraSetup: CameraSetup
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,15 +22,17 @@ class TwibbonPage : Fragment() {
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         // Inflate the layout for this fragment
-        _binding = FragmentTwibbonPageBinding.inflate(inflater, container, false)
+        binding = FragmentTwibbonPageBinding.inflate(inflater, container, false)
         with (binding) {
             cameraView.previewStreamState.observe(viewLifecycleOwner) {
                 if (it == PreviewView.StreamState.STREAMING)
                     cameraView.overlay.add(twibbonView)
             }
-            captureBtn.isVisible = false
             CameraSetup(cameraView).setup(this@TwibbonPage) { cam ->
+                cameraSetup = cam
                 captureBtn.isVisible = true
+                twibbonChangeCameraBtn.isVisible = true
+                twibbonChangeCameraBtn.setOnClickListener(changeCamera)
                 cam.cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
                 setCaptureButton(cam)
             }
@@ -38,13 +40,26 @@ class TwibbonPage : Fragment() {
         }
     }
 
+    private val changeCamera: (View) -> Unit = {
+        cameraSetup.stopCamera()
+        when (cameraSetup.cameraSelector) {
+            CameraSelector.DEFAULT_FRONT_CAMERA -> {
+                cameraSetup.cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            }
+            CameraSelector.DEFAULT_BACK_CAMERA -> {
+                cameraSetup.cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+            }
+        }
+        cameraSetup.startCamera()
+    }
+
     private fun setCaptureButton(cam: CameraSetup) {
         with (binding) {
-            captureBtn.text = getString(R.string.capture_btn_take)
+            captureBtn.text = getString(com.pap.majika.R.string.capture_btn_take)
             cam.startCamera()
             captureBtn.setOnClickListener {
                 cam.stopCamera()
-                captureBtn.text = getString(R.string.capture_btn_retake)
+                captureBtn.text = getString(com.pap.majika.R.string.capture_btn_retake)
                 captureBtn.setOnClickListener {
                     setCaptureButton(cam)
                 }

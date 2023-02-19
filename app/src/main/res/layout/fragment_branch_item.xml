@@ -20,44 +20,77 @@
             android:id="@+id/nameText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="20sp"
             android:textStyle="bold" />
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
         <TextView
             android:id="@+id/addressText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="5sp"
-            android:text="Address" />
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
 
         <TextView
             android:id="@+id/phoneText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Phone" />
+            android:text="@string/branch_phone_text" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <TextView
+            android:id="@+id/popularFoodText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/branch_fav_food_text" />
+
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/branchItemMaps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
         android:layout_marginEnd="14dp"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/branchItemDetail"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/branchMapsBtn"
-            android:layout_width="match_parent"
+        <ImageButton
+            android:id="@+id/branchCallBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@android:color/transparent"
+            android:contentDescription="@string/branch_call_desc_btn"
+            android:src="@drawable/ic_branch_call"
+            app:tint="?attr/colorPrimary" />
+
+        <Space
+            android:layout_width="5dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="24dp"
-            android:text="Maps" />
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/branchMapsBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/transparent"
+            android:contentDescription="@string/branch_loc_desc_btn"
+            android:src="@drawable/ic_branch_map"
+            app:tint="?attr/colorPrimary" />
+
     </LinearLayout>
 
     <View

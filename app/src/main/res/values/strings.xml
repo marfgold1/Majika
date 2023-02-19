@@ -35,6 +35,10 @@
     <string name="status_branch_na">Cannot get the data from server.</string>
     <string name="status_branch_empty">No branch available.</string>
     <string name="switch_camera_desc_btn">Switch camera</string>
+    <string name="branch_phone_text">%s a.n. %s</string>
+    <string name="branch_loc_desc_btn">Branch Location</string>
+    <string name="branch_call_desc_btn">Call the branch</string>
+    <string name="branch_fav_food_text">Favorite Food: %s</string>
 
 
     <!--    Menu Types -->

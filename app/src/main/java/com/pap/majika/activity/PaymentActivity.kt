@@ -170,7 +170,6 @@ class PaymentActivity : AppCompatActivity() {
                 barcode?.rawValue?.let {
                     if (trIdRegex.matches(it)) {
                         stopAnalysis()
-                        Log.d("PaymentBarcode", "Barcode detected: $it")
                         binding.statusTitleText.text = getText(
                             R.string.status_title_pay_checking,
                         )

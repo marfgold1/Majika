@@ -26,10 +26,12 @@ class BottomNav : Fragment() {
                     value.compoundDrawables[1].setTint(resources.getColor(R.color.black))
                     value.setTextColor(resources.getColor(R.color.black))
                     value.setBackgroundColor(resources.getColor(R.color.white))
+                    value.isClickable = false
                 } else {
                     value.compoundDrawables[1].setTint(resources.getColor(R.color.white))
                     value.setTextColor(resources.getColor(R.color.white))
                     value.setBackgroundColor(resources.getColor(com.google.android.material.R.color.design_default_color_primary))
+                    value.isClickable = true
                 }
             }
         }

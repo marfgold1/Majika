@@ -1,5 +1,6 @@
 package com.pap.majika.viewModel
 
+import android.util.Log
 import androidx.lifecycle.*
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.CreationExtras
@@ -19,11 +20,17 @@ class MenuViewModel(
     private var _cartList = MutableLiveData<Map<Menu, CartItem>>()
     val cartList : LiveData<Map<Menu, CartItem>> = _cartList
 
+    private var currentFilter: Pair<String, String> = Pair("", "")
+
+
 
     init {
         refreshMenuList()
         appRepository.menusWithCartItem.observeForever { entry ->
-            _menuList.value = entry
+            _menuList.value = entry.filter {
+                it.key.name.contains(currentFilter.first, true)
+                        && it.key.type.contains(currentFilter.second)
+            }
             _cartList.value = entry.filter { it.value.quantity > 0 }
         }
     }
@@ -35,10 +42,13 @@ class MenuViewModel(
     }
 
     fun filterMenuList(search: String, filter: String) {
+        Log.d("MenuViewModel", "filterMenuList: $search, $filter")
+        if (currentFilter == Pair(search, filter)) return
+        currentFilter = Pair(search, filter)
         viewModelScope.launch {
             _menuList.value = appRepository.getMenusWithCartItem().filter {
                 it.key.name.contains(search, true)
-                        && it.key.type.contains(filter, true)
+                        && it.key.type.contains(filter)
             }
         }
     }

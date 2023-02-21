@@ -34,9 +34,8 @@ class CartPage : Fragment() {
         formatPrice.maximumFractionDigits = 2
         viewModel.cartList.observe(this) { tuple ->
             if (tuple !== null) {
-                val cartItems = tuple.filter { it.value.quantity > 0 }
-                if (cartItems.isNotEmpty()) {
-                    recyclerView.adapter = MenuItemAdapter(cartItems, viewModel)
+                if (tuple.isNotEmpty()) {
+                    recyclerView.adapter = MenuItemAdapter(tuple, viewModel)
                     val subtotalString = formatPrice.format(tuple.map {
                         it.key.price * it.value.quantity
                     }.sum())

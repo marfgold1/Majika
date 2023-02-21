@@ -14,6 +14,7 @@ class AppRepository(
     private var _menusWithCartItem = MutableLiveData<Map<Menu, CartItem>>(mapOf())
      val menusWithCartItem get() = _menusWithCartItem as LiveData<Map<Menu, CartItem>>
 
+
     //    Menu
     suspend fun getMenusWithCartItem() : Map<Menu, CartItem> {
         if (_menusWithCartItem.value == null) {
@@ -27,25 +28,28 @@ class AppRepository(
             val response = MajikaApi.getInstance().getMenus()
             var menus = response.data!!
             var oldMenusName = menusWithCartItem.map {
-                it.key.name
+//                name and description
+                it.key.name to it.key.description
             }
             var newMenus = menus.filter {
-                !oldMenusName.contains(it.name)
+                !oldMenusName.contains(it.name to it.description)
             }
 
             if (newMenus.isNotEmpty()) {
                 appStore.menuDao().updateAllMenu(menus)
                 appStore.menuDao().deleteAllCartItem()
+                Log.d("Repository", "loadMenusWithCartItem: ${menusWithCartItem.map { it.key.name }}")
                 return menus.associateWith {
-                    CartItem(it.name, 0)
+                    CartItem(it.name, it.description, 0)
                 }.toMutableMap()
             }
         } catch (e: Exception) {
             Log.e("MajikaApp", "AppRepository initialization failed", e)
         }
+        Log.d("Repository", "menusWithCartItem: ${menusWithCartItem.map { it.key.name }}")
         return menusWithCartItem.map {
             if (it.value.isEmpty()) {
-                it.key to CartItem(it.key.name, 0)
+                it.key to CartItem(it.key.name, it.key.description, 0)
             } else {
                 it.key to it.value[0]
             }
@@ -58,7 +62,7 @@ class AppRepository(
 
 
     suspend fun addCartItem(menu: Menu, qty: Int) {
-        var cartItem = getMenusWithCartItem().getOrDefault(menu, CartItem(menu.name, 0))
+        var cartItem = getMenusWithCartItem().getOrDefault(menu, CartItem(menu.name, menu.description, 0))
         cartItem.quantity += qty
         appStore.menuDao().updateCartItem(cartItem)
         refreshMenusWithCartItem()

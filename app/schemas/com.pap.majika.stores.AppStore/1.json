@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "fe25ea77833c40299e49d5529c08d0da",
+    "identityHash": "96a47a20033a8da87ceed33b00fdbd12",
     "entities": [
       {
         "tableName": "menu",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `description` TEXT NOT NULL, `currency` TEXT NOT NULL, `price` INTEGER NOT NULL, `sold` INTEGER NOT NULL, `type` TEXT NOT NULL, PRIMARY KEY(`name`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `description` TEXT NOT NULL, `currency` TEXT NOT NULL, `price` INTEGER NOT NULL, `sold` INTEGER NOT NULL, `type` TEXT NOT NULL, PRIMARY KEY(`name`, `description`))",
         "fields": [
           {
             "fieldPath": "name",
@@ -48,7 +48,8 @@
         "primaryKey": {
           "autoGenerate": false,
           "columnNames": [
-            "name"
+            "name",
+            "description"
           ]
         },
         "indices": [],
@@ -56,11 +57,17 @@
       },
       {
         "tableName": "cart_item",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `quantity` INTEGER NOT NULL, PRIMARY KEY(`name`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `description` TEXT NOT NULL, `quantity` INTEGER NOT NULL, PRIMARY KEY(`name`, `description`))",
         "fields": [
           {
             "fieldPath": "name",
             "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -74,7 +81,8 @@
         "primaryKey": {
           "autoGenerate": false,
           "columnNames": [
-            "name"
+            "name",
+            "description"
           ]
         },
         "indices": [],
@@ -84,7 +92,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fe25ea77833c40299e49d5529c08d0da')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '96a47a20033a8da87ceed33b00fdbd12')"
     ]
   }
 }

@@ -55,6 +55,7 @@ class MenuPage : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
+        binding.menuSearch.text.clear()
         binding.menuSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -73,11 +74,16 @@ class MenuPage : Fragment() {
             viewModel.refreshMenuList()
         }
         viewModel.menuList.observe(viewLifecycleOwner) { tuple ->
+            Log.d("MenuPage", "Menu list updated with ${tuple?.size} items")
             if (tuple !== null) {
                 binding.menuSwipeLayout.isRefreshing = false
-                binding.menuRecyclerView.adapter = MenuItemAdapter(tuple, viewModel)
+                binding.menuRecyclerView.adapter = MenuItemAdapter(tuple.toSortedMap(
+                    compareBy { it.name }
+                ), viewModel)
                 binding.menuRecyclerView.visibility = View.VISIBLE
                 binding.menuSearchLayout.visibility = View.VISIBLE
+                Log.d("MenuPage", binding.menuFilter.selectedItem.toString())
+                viewModel.filterMenuList(binding.menuSearch.text.toString(), binding.menuFilter.selectedItem.toString())
             } else {
                 viewModel.refreshMenuList()
             }

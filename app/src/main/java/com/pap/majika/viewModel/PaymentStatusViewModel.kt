@@ -23,11 +23,20 @@ class PaymentStatusViewModel(
     // Handle business logic
     fun postTransaction(transactionId: String) {
         viewModelScope.launch {
-            appRepository.clearCart()
-            _uiState.value = PaymentStatus(
-                transactionId,
-                apiClient.postPayment(transactionId).status,
-            )
+            try {
+                _uiState.value = PaymentStatus(
+                    transactionId,
+                    apiClient.postPayment(transactionId).status,
+                )
+                if (uiState.value.status == "SUCCESS") {
+                    appRepository.clearCart()
+                }
+            } catch (e: Exception) {
+                _uiState.value = PaymentStatus(
+                    transactionId,
+                    "FAILED",
+                )
+            }
         }
     }
 

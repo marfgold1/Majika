@@ -50,6 +50,7 @@ class TwibbonPage : Fragment() {
                 cameraSetup.cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
             }
         }
+        binding.captureBtn.text = getString(com.pap.majika.R.string.capture_btn_take)
         cameraSetup.startCamera()
     }
 

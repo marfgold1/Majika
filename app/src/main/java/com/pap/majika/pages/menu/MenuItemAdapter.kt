@@ -1,6 +1,9 @@
 package com.pap.majika.pages.menu
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.pap.majika.databinding.FragmentMenuItemBinding
@@ -23,14 +26,28 @@ class MenuItemAdapter(
             menuItemPrice.text = menu.price.toString()
             menuItemSold.text = "Sold: ${menu.sold}"
             menuAddToCart.setOnClickListener {
-                menuViewModel.addToCart(menu)
+                menuViewModel.addToCart(menu, 1)
                 if (cart.quantity == 1) menuRemoveFromCart.isClickable = true
                 menuCartQty.text = cart.quantity.toString()
             }
             menuRemoveFromCart.setOnClickListener {
-                menuViewModel.removeFromCart(menu)
+                menuViewModel.removeFromCart(menu, 1)
                 if (cart.quantity == 0) menuRemoveFromCart.isClickable = false
                 menuCartQty.text = cart.quantity.toString()
+            }
+
+            menuAddToCart.setOnLongClickListener {
+                menuViewModel.addToCart(menu, 10)
+                if (cart.quantity == 1) menuRemoveFromCart.isClickable = true
+                menuCartQty.text = cart.quantity.toString()
+                true
+            }
+
+            menuRemoveFromCart.setOnLongClickListener {
+                menuViewModel.removeFromCart(menu, 10)
+                if (cart.quantity == 0) menuRemoveFromCart.isClickable = false
+                menuCartQty.text = cart.quantity.toString()
+                true
             }
         }
     }

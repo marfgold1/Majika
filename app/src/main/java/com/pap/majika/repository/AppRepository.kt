@@ -1,6 +1,8 @@
 package com.pap.majika.repository
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.pap.majika.api.MajikaApi
 import com.pap.majika.models.CartItem
 import com.pap.majika.models.Menu
@@ -9,8 +11,17 @@ import com.pap.majika.stores.AppStore
 class AppRepository(
     private val appStore: AppStore,
 ) {
-//    Menu
-    suspend fun getMenusWithCartItem() : MutableMap<Menu, CartItem> {
+    private var _menusWithCartItem = MutableLiveData<Map<Menu, CartItem>>(mapOf())
+     val menusWithCartItem get() = _menusWithCartItem as LiveData<Map<Menu, CartItem>>
+
+    //    Menu
+    suspend fun getMenusWithCartItem() : Map<Menu, CartItem> {
+        if (_menusWithCartItem.value == null) {
+            _menusWithCartItem.value = loadMenusWithCartItem()
+        }
+        return menusWithCartItem.value!!
+    }
+    private suspend fun loadMenusWithCartItem() : Map<Menu, CartItem> {
         val menusWithCartItem = appStore.menuDao().getAllMenuWithCartItem()
         try {
             val response = MajikaApi.getInstance().getMenus()
@@ -41,22 +52,32 @@ class AppRepository(
         }.toMap().toMutableMap()
     }
 
-    fun updateCartItem(cartItem: CartItem) {
-        if (cartItem.quantity == 0) {
+    suspend fun refreshMenusWithCartItem() {
+        _menusWithCartItem.value = loadMenusWithCartItem()
+    }
+
+
+    suspend fun addCartItem(menu: Menu, qty: Int) {
+        var cartItem = getMenusWithCartItem().getOrDefault(menu, CartItem(menu.name, 0))
+        cartItem.quantity += qty
+        appStore.menuDao().updateCartItem(cartItem)
+        refreshMenusWithCartItem()
+    }
+
+    suspend fun removeCartItem(menu: Menu, qty: Int) {
+        var cartItem: CartItem = getMenusWithCartItem()[menu] ?: return
+        cartItem.quantity -= qty
+        if (cartItem.quantity < 0) {
             appStore.menuDao().deleteCartItem(cartItem)
         } else {
             appStore.menuDao().updateCartItem(cartItem)
         }
+        refreshMenusWithCartItem()
     }
 
-    fun clearCart() : Int {
-        return appStore.menuDao().deleteAllCartItem()
-    }
-
-    fun getCartItems() : MutableMap<Menu, CartItem> {
-        val cartItems = appStore.menuDao().getAllCartItem()
-        return cartItems.map {
-            it.value[0] to it.key
-        }.toMap().toMutableMap()
+    suspend fun clearCart() : Int {
+        val count = appStore.menuDao().deleteAllCartItem()
+        refreshMenusWithCartItem()
+        return count
     }
 }

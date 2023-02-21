@@ -21,6 +21,7 @@ class CartPage : Fragment() {
     private lateinit var subtotal: android.widget.TextView
     private lateinit var payButton : android.widget.Button
     private val formatPrice: NumberFormat = NumberFormat.getCurrencyInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(

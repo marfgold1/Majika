@@ -12,49 +12,50 @@ import kotlinx.coroutines.launch
 class MenuViewModel(
     private val appRepository: AppRepository
 ) : ViewModel() {
-    private var _totalMenuList: MutableMap<Menu, CartItem>? = null
-
-//    Menu
+    //    Menu
     private val _menuList = MutableLiveData<Map<Menu, CartItem>>()
-    val menuList = _menuList as LiveData<Map<Menu, CartItem>>
+    val menuList : LiveData<Map<Menu, CartItem>> = _menuList
+    //    Cart
+    private var _cartList = MutableLiveData<Map<Menu, CartItem>>()
+    val cartList : LiveData<Map<Menu, CartItem>> = _cartList
+
 
     init {
         refreshMenuList()
+        appRepository.menusWithCartItem.observeForever { entry ->
+            _menuList.value = entry
+            _cartList.value = entry.filter { it.value.quantity > 0 }
+        }
     }
 
     fun refreshMenuList() {
         viewModelScope.launch {
-            _totalMenuList = appRepository.getMenusWithCartItem()
-            _menuList.value = _totalMenuList ?: mapOf()
-            _cartList.value = _totalMenuList?.filter { it.value.quantity > 0 } ?: mapOf()
+            appRepository.refreshMenusWithCartItem()
         }
     }
 
     fun filterMenuList(search: String, filter: String) {
-        _menuList.value = _totalMenuList?.filter {
-            it.key.name.contains(search, true)
-                    && it.key.type.contains(filter, true)
+        viewModelScope.launch {
+            _menuList.value = appRepository.getMenusWithCartItem().filter {
+                it.key.name.contains(search, true)
+                        && it.key.type.contains(filter, true)
+            }
         }
     }
 
-    fun addToCart(menu: Menu) {
-        var cartItem = _totalMenuList!!.getOrDefault(menu, CartItem(menu.name, 0))
-        cartItem.quantity += 1
-        appRepository.updateCartItem(cartItem)
-        _totalMenuList!![menu] = cartItem
-        _cartList.value = _totalMenuList?.filter { it.value.quantity > 0 } ?: mapOf()
+    fun addToCart(menu: Menu, qty: Int) {
+        viewModelScope.launch {
+            appRepository.addCartItem(menu, qty)
+        }
     }
 
-    fun removeFromCart(menu: Menu) {
-        var cartItem = _totalMenuList!![menu]
-        cartItem!!.quantity -= 1
-        appRepository.updateCartItem(cartItem!!)
-        _cartList.value = _totalMenuList?.filter { it.value.quantity > 0 } ?: mapOf()
+    fun removeFromCart(menu: Menu, qty: Int) {
+        viewModelScope.launch {
+            appRepository.removeCartItem(menu, qty)
+        }
     }
 
-//    Cart
-    var _cartList = MutableLiveData<Map<Menu, CartItem>>()
-    val cartList = _cartList as LiveData<Map<Menu, CartItem>>
+
 
 //    Factory
     companion object {

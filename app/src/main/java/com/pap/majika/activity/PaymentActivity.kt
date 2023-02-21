@@ -19,6 +19,7 @@ import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
+import com.pap.majika.MajikaApp
 import com.pap.majika.R
 import com.pap.majika.databinding.ActivityPaymentBinding
 import com.pap.majika.utils.CameraSetup
@@ -138,7 +139,11 @@ class PaymentActivity : AppCompatActivity() {
         barcodeScanner: BarcodeScanner,
         imageProxy: ImageProxy
     ) {
-        val paymentStatusViewModel: PaymentStatusViewModel by viewModels()
+        val paymentStatusViewModel: PaymentStatusViewModel by viewModels(
+            factoryProducer = {
+                PaymentStatusViewModel.FACTORY
+            }
+        )
         val inputImage =
             InputImage.fromMediaImage(
                 imageProxy.image!!,

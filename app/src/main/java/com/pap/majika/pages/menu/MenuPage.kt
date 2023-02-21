@@ -68,11 +68,12 @@ class MenuPage : Fragment() {
 
         binding.menuSwipeLayout.isRefreshing = true
         binding.menuSwipeLayout.setOnRefreshListener {
-            viewModel.refreshMenuList()
             binding.menuRecyclerView.visibility = View.GONE
             binding.menuSearchLayout.visibility = View.GONE
+            viewModel.refreshMenuList()
         }
         viewModel.menuList.observe(viewLifecycleOwner) { tuple ->
+            Log.d("MenuPage", "menuList changed: $tuple")
             if (tuple !== null) {
                 binding.menuSwipeLayout.isRefreshing = false
                 binding.menuRecyclerView.adapter = MenuItemAdapter(tuple, viewModel)

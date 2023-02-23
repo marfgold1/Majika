@@ -7,10 +7,10 @@
     tools:context=".components.BottomNav"
     android:padding="3sp"
     android:background="@color/design_default_color_primary">
+
     <Button
         android:id="@+id/nav_button_twibbon"
         style="?android:attr/buttonBarButtonStyle"
-        android:padding="10dp"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.25"
@@ -19,27 +19,30 @@
         android:drawableTint="@color/white"
         android:insetTop="0dp"
         android:insetBottom="0dp"
+        android:padding="10dp"
         android:text="@string/menu_twibbon"
         android:textColor="@color/white"
-        />
+        android:textSize="12sp" />
+
     <Button
         android:id="@+id/nav_button_branch"
         style="?android:attr/buttonBarButtonStyle"
-        android:padding="10dp"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.25"
         android:backgroundTint="@color/design_default_color_primary"
-        android:drawableTint="@color/white"
         android:drawableTop="@drawable/ic_branch_black_24dp"
+        android:drawableTint="@color/white"
         android:insetTop="0dp"
         android:insetBottom="0dp"
+        android:padding="10dp"
         android:text="@string/menu_branch"
-        android:textColor="@color/white"/>
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
     <Button
         android:id="@+id/nav_button_menu"
         style="?android:attr/buttonBarButtonStyle"
-        android:padding="10dp"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.25"
@@ -48,12 +51,14 @@
         android:drawableTint="@color/white"
         android:insetTop="0dp"
         android:insetBottom="0dp"
+        android:padding="10dp"
         android:text="@string/menu_menu"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
     <Button
         android:id="@+id/nav_button_cart"
         style="?android:attr/buttonBarButtonStyle"
-        android:padding="10dp"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.25"
@@ -62,6 +67,8 @@
         android:drawableTint="@color/white"
         android:insetTop="0dp"
         android:insetBottom="0dp"
+        android:padding="10dp"
         android:text="@string/menu_cart"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:textSize="12sp" />
 </LinearLayout>

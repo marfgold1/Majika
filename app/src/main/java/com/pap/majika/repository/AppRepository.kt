@@ -70,6 +70,10 @@ class AppRepository(
 
     suspend fun removeCartItem(menu: Menu, qty: Int) {
         var cartItem: CartItem = getMenusWithCartItem()[menu] ?: return
+        if (cartItem.quantity == 0) {
+            refreshMenusWithCartItem()
+            return;
+        }
         cartItem.quantity -= qty
         if (cartItem.quantity < 0) {
             appStore.menuDao().deleteCartItem(cartItem)

@@ -22,17 +22,20 @@ class MenuViewModel(
 
     private var currentFilter: Pair<String, String> = Pair("", "")
 
+    private val observer : Observer<Map<Menu, CartItem>>
+
 
 
     init {
         refreshMenuList()
-        appRepository.menusWithCartItem.observeForever { entry ->
+        observer = Observer { entry ->
             _menuList.value = entry.filter {
                 it.key.name.contains(currentFilter.first, true)
                         && it.key.type.contains(currentFilter.second)
             }
             _cartList.value = entry.filter { it.value.quantity > 0 }
         }
+        appRepository.menusWithCartItem.observeForever(observer)
     }
 
     fun refreshMenuList() {
@@ -63,6 +66,11 @@ class MenuViewModel(
         viewModelScope.launch {
             appRepository.removeCartItem(menu, qty)
         }
+    }
+
+    override fun onCleared() {
+        appRepository.menusWithCartItem.removeObserver(observer)
+        super.onCleared()
     }
 
 

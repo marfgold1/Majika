@@ -67,19 +67,22 @@ class MenuPage : Fragment() {
         binding.menuRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.menuRecyclerView.adapter = MenuItemAdapter(mapOf(), viewModel)
 
-        binding.menuSwipeLayout.isRefreshing = true
         binding.menuSwipeLayout.setOnRefreshListener {
             binding.menuRecyclerView.visibility = View.GONE
             binding.menuSearchLayout.visibility = View.GONE
+            binding.errorLayout.visibility = View.GONE
             viewModel.refreshMenuList()
         }
         viewModel.menuList.observe(viewLifecycleOwner) { tuple ->
             Log.d("MenuPage", "Menu list updated with ${tuple?.size} items")
             if (tuple !== null) {
+                if (tuple.isEmpty())
+                    binding.errorLayout.visibility = View.VISIBLE
+                else
+                    binding.errorLayout.visibility = View.GONE
                 binding.menuSwipeLayout.isRefreshing = false
                 binding.menuRecyclerView.visibility = View.VISIBLE
                 binding.menuSearchLayout.visibility = View.VISIBLE
-                Log.d("MenuPage", binding.menuFilter.selectedItem.toString())
                 viewModel.filterMenuList(binding.menuSearch.text.toString(), binding.menuFilter.selectedItem.toString())
                 binding.menuRecyclerView.adapter = MenuItemAdapter(tuple.toSortedMap(
                     compareBy {
@@ -87,10 +90,20 @@ class MenuPage : Fragment() {
                     }
                 ), viewModel)
             } else {
-                viewModel.refreshMenuList()
+                binding.menuRecyclerView.visibility = View.GONE
+                binding.menuSearchLayout.visibility = View.GONE
+                binding.errorLayout.visibility = View.GONE
             }
         }
 
+        binding.errorRefreshButton.setOnClickListener {
+            binding.menuRecyclerView.visibility = View.GONE
+            binding.menuSearchLayout.visibility = View.GONE
+            binding.errorLayout.visibility = View.GONE
+            binding.menuSwipeLayout.isRefreshing = true
+            viewModel.refreshMenuList()
+        }
+        binding.menuSwipeLayout.isRefreshing = true
         return binding.root
     }
 }

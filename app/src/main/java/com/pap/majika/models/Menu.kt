@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity(tableName = "menu", primaryKeys = ["name", "description"])
+@Entity(tableName = "menu", primaryKeys = ["name"])
 class Menu (
     name: String,
     description: String,

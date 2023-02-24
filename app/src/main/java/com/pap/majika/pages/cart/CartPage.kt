@@ -20,6 +20,7 @@ class CartPage : Fragment() {
     private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
     private lateinit var subtotal: android.widget.TextView
     private lateinit var payButton : android.widget.Button
+    private lateinit var errorText : android.widget.TextView
     private val formatPrice: NumberFormat = NumberFormat.getCurrencyInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +35,7 @@ class CartPage : Fragment() {
         formatPrice.maximumFractionDigits = 2
         viewModel.cartList.observe(this) { tuple ->
             if (tuple !== null) {
+                errorText.isVisible = false
                 if (tuple.isNotEmpty()) {
                     recyclerView.adapter = MenuItemAdapter(tuple, viewModel)
                     val subtotalString = formatPrice.format(tuple.map {
@@ -43,14 +45,15 @@ class CartPage : Fragment() {
                     payButton.isVisible = true
                 } else {
                     recyclerView.adapter = MenuItemAdapter(mapOf(), viewModel)
-                    subtotal.text = "0.00"
+                    subtotal.text = "Cart is empty"
                     payButton.isVisible = false
                 }
             } else {
                 viewModel.refreshMenuList()
                 recyclerView.adapter = MenuItemAdapter(mapOf(), viewModel)
-                subtotal.text = "0.00"
+                subtotal.text = ""
                 payButton.isVisible = false
+                errorText.isVisible = true
             }
         }
 
@@ -64,6 +67,7 @@ class CartPage : Fragment() {
         recyclerView = view.findViewById(R.id.cart_recycler_view)
         subtotal = view.findViewById(R.id.cart_subtotal)
         payButton = view.findViewById(R.id.cart_pay_button)
+        errorText = view.findViewById(R.id.cart_error_text)
 
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
         recyclerView.adapter = MenuItemAdapter(mapOf(), viewModel)

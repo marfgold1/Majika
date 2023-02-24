@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.pap.majika.models.CartItem
 import com.pap.majika.models.Menu
 
-@Database(entities = [Menu::class, CartItem::class], version = 1)
+@Database(entities = [Menu::class, CartItem::class], version = 2)
 abstract class AppStore : RoomDatabase() {
     abstract fun menuDao(): MenuDao
 

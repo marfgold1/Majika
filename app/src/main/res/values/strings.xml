@@ -39,6 +39,7 @@
     <string name="branch_loc_desc_btn">Branch Location</string>
     <string name="branch_call_desc_btn">Call the branch</string>
     <string name="branch_fav_food_text">Favorite Food: %s</string>
+    <string name="refreshbutton">Refresh</string>
 
 
     <!--    Menu Types -->

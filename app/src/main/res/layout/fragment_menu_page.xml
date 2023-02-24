@@ -8,18 +8,6 @@
     tools:context=".pages.menu.MenuPage">
 
 
-        <TextView
-            android:id="@+id/menuErrorText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/error_no_menu_found"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/menuSearchLayout"
-            app:layout_constraintTop_toTopOf="@+id/menuSwipeLayout"
-            tools:visibility="visible" />
-
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/menuSwipeLayout"
             android:layout_width="match_parent"
@@ -60,12 +48,37 @@
                     android:ems="10"
                     android:hint="@string/search"
                     android:inputType="textNoSuggestions" />
+
                 <Spinner
+                    android:id="@+id/menuFilter"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:id="@+id/menuFilter"
-                    android:entries="@array/menu_types"
-                    />
+                    android:entries="@array/menu_types" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/errorLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/menuErrorText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/error_no_menu_found" />
+
+                <Button
+                    android:id="@+id/errorRefreshButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/refreshbutton" />
         </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
